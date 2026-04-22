@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .email-card { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden; }
+        .header { background: linear-gradient(135deg, #dd690a 0%, #2575fc 100%); padding: 20px; text-align: center; color: white; }
+        .content { padding: 30px; line-height: 1.6; color: #333; }
+        .footer { background: #f8f9fa; padding: 15px; text-align: center; font-size: 12px; color: #777; }
+        .badge { padding: 5px 12px; border-radius: 50px; font-weight: bold; font-size: 12px; text-transform: uppercase; }
+        .high { background: #fee2e2; color: #b91c1c; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .label { font-weight: bold; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="email-card">
+        <div class="header">
+            <img src="cid:logo" width="60" style="border-radius: 50%; background: white; padding: 2px;"><br>
+            <h2 style="margin: 10px 0 0 0;">New Support Ticket Received</h2>
+        </div>
+        <div class="content">
+            <p>Hello Admin,</p>
+            <p>A new ICT support request has been submitted by a staff member. Here are the details:</p>
+            
+            <table class="table">
+                <tr><td class="label">Ticket ID:</td><td>#{{ ticket.id }}</td></tr>
+                <tr><td class="label">Staff Name:</td><td>{{ user.get_full_name|upper }}</td></tr>
+                <tr><td class="label">Department:</td><td>{{ user.profile.department }}</td></tr>
+                <tr><td class="label">Subject:</td><td><strong>{{ ticket.title }}</strong></td></tr>
+                <tr><td class="label">Priority:</td><td><span class="badge high">{{ ticket.priority }}</span></td></tr>
+                <tr><td class="label">Submitted:</td><td>{{ ticket.created_at|date:"D, d M Y, H:i" }}</td></tr>
+            </table>
+
+            <div style="margin-top: 25px; padding: 15px; background: #fcfcfc; border-left: 4px solid #dd690a;">
+                <strong>Issue Description:</strong><br>
+                {{ ticket.description }}
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{{ site_url }}/admin/tickets/ticket/{{ ticket.id }}/change/" 
+                   style="background: #2575fc; color: white; padding: 12px 25px; text-decoration: none; border-radius: 50px; font-weight: bold;">
+                    Open in Admin Portal
+                </a>
+            </div>
+        </div>
+        <div class="footer">
+            <img src="cid:coa" width="40" style="margin-bottom: 10px;"><br>
+            © {{ ticket.created_at|date:"Y" }} Northern Water Works Development Agency (NWWDA)<br>
+            ICT Department - Support Notification System
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+/* ============================================================
+   1. LOGIN: FROSTED GLASS & WATERMARK
+   ============================================================ */
+body.login-page { 
+    background-color: #0f0c29 !important; 
+    overflow: hidden; 
+}
+
+body.login-page::before {
+    content: ""; position: absolute; width: 750px; height: 750px;
+    background: url('/static/images/logo.jpg') no-repeat center center !important;
+    background-size: contain !important; border-radius: 50%;
+    opacity: 0.6 !important; filter: brightness(105%) !important;
+    top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0;
+}
+
+body.login-page .card {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) saturate(160%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 15px !important; z-index: 2;
+}
+
+/* ============================================================
+   2. GLOBAL COLORS & SIDEBAR
+   ============================================================ */
+body:not(.login-page), .content-wrapper, .main-sidebar, .main-footer {
+    background-color: #0f0c29 !important; color: #ffffff !important;
+}
+
+.brand-link .brand-image, .main-sidebar .brand-link img {
+    border-radius: 50% !important; background: white !important;
+    width: 33px !important; height: 33px !important;
+    box-shadow: 0 0 10px rgba(79, 172, 254, 0.6) !important;
+    object-fit: contain !important;
+}
+
+/* ============================================================
+   3. DASHBOARD WIDGETS
+   ============================================================ */
+.small-box {
+    border-radius: 12px !important;
+    transition: all 0.3s ease-in-out !important;
+    border: none !important;
+    color: #ffffff !important;
+}
+
+.glow-red-pulse {
+    animation: neon-red-pulse 1.2s infinite alternate !important;
+}
+
+@keyframes neon-red-pulse {
+    from { box-shadow: 0 0 10px #ff4d4d; }
+    to { box-shadow: 0 0 30px #ff0000; }
+}
+
+.small-box:hover { transform: translateY(-8px); filter: brightness(1.1); }
+.glow-orange:hover { box-shadow: 0 0 30px rgba(255, 193, 7, 0.8) !important; }
+.glow-green:hover { box-shadow: 0 0 30px rgba(40, 167, 69, 0.8) !important; }
+
+/* ============================================================
+   4. THE CRITICAL DROPDOWN FIX (SELECT2)
+   ============================================================ */
+
+/* Target the Select2 search box and dropdown results */
+.select2-container--default .select2-selection--single,
+.select2-dropdown,
+.select2-search__field,
+.select2-results__option {
+    background-color: #2c2f33 !important;
+    color: #ffffff !important;
+    border-color: #4f5b66 !important;
+}
+
+/* Fix text color for the currently selected item */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #ffffff !important;
+    line-height: 28px;
+}
+
+/* Highlight color when you hover over an option in the list */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #3498db !important;
+    color: white !important;
+}
+
+/* Fix for standard (non-select2) dropdowns */
+select, select option {
+    background-color: #2c2f33 !important;
+    color: #ffffff !important;
+}
+
+/* ============================================================
+   5. ADMIN FORM: READ-ONLY STYLING
+   ============================================================ */
+.readonly {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #bbbbbb !important;
+    padding: 10px !important;
+    border-radius: 8px;
+    font-style: italic;
+}
+
+.form-row.field-title label, .form-row.field-description label {
+    color: #888888 !important;
+}
+
+/* Highlight the Editable Fields */
+select#id_status, select#id_priority {
+    border: 2px solid #3498db !important;
+}
+
+/* 1. Force the Login Logo to be a perfect circle and remove doubles */
+.login-box .login-logo img {
+    width: 160px !important;
+    height: 160px !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+    border: 3px solid #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* 2. Fix the Sidebar/Navbar logo to stay circular without stretching */
+.brand-link .brand-image {
+    object-fit: cover !important;
+    border-radius: 50% !important;
+    width: 33px !important; /* Standard Jazzmin sidebar size */
+    height: 33px !important;
+    max-height: 33px !important;
+}
+
+/* 3. Ensure the background behind the logo doesn't distort it */
+.login-page, .register-page {
+    background-color: #1a1a2e !important; /* Matches your dark theme */
+}

@@ -1,0 +1,111 @@
+/* Admin Login High-Tech Makeover */
+body.login-page {
+    background: linear-gradient(rgba(26, 26, 46, 0.85), rgba(118, 75, 162, 0.75)), 
+                url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1950') !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+.login-box {
+    width: 400px !important;
+}
+
+/* Transform the Login Card into Glass */
+.login-card-body {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 20px !important;
+    color: white !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3) !important;
+}
+
+/* Center and Circularize the Admin Logo */
+.login-logo img {
+    border-radius: 50% !important;
+    background: white !important;
+    padding: 5px !important;
+    width: 100px !important;
+    height: 100px !important;
+    object-fit: cover !important;
+    box-shadow: 0 0 20px rgba(118, 75, 162, 0.5) !important;
+    margin-bottom: 10px !important;
+}
+
+.login-box-msg {
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    color: rgba(255,255,255,0.9) !important;
+}
+
+/* Button & Input Styling */
+.btn-primary {
+    background: linear-gradient(90deg, #764ba2, #667eea) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+}
+
+/* 1. Dashboard Background - Removing the white "void" */
+.content-wrapper {
+    background-color: #1a1a2e !important; /* Deep Navy */
+    background-image: radial-gradient(circle at 20% 30%, rgba(118, 75, 162, 0.1) 0%, transparent 50%) !important;
+}
+
+/* 2. Header Style Sync */
+.main-header {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+/* 3. Rocket Icon & Brand Alignment */
+.brand-link {
+    background: #1a1a2e !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.brand-link .brand-image {
+    margin-top: -2px;
+    max-height: 33px;
+}
+
+/* 4. Dashboard Cards (Groups, Users, Tickets) */
+.card {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 15px !important;
+    color: #ffffff !important;
+}
+
+.card-header {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 5. Recent Actions (Sidebar on the right) */
+.timeline-item {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 10px !important;
+    color: white !important;
+    border: none !important;
+    margin-bottom: 10px !important;
+}
+
+.timeline-header {
+    color: #667eea !important;
+    font-weight: bold !important;
+}
+
+/* 6. Fix text visibility on the white background */
+h1, .breadcrumb-item a {
+    color: white !important;
+    opacity: 0.9;
+}

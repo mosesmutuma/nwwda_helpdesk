@@ -1,0 +1,251 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NWWDA | Secure Gateway</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-purple: #764ba2;
+            --primary-blue: #667eea;
+            --warning-orange: #ff9f43;
+            --danger-red: #ff4757;
+            --success-green: #2ecc71;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #0f0c29;
+            overflow-x: hidden;
+        }
+
+        .bg-overlay {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(19, 33, 54, 0.4)), 
+                              url('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+        /* --- LOGIN CARD --- */
+        .login-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 40px;
+            color: white; 
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            animation: slideInLeft 1s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .brand-logo {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: white;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .login-glass .form-label {
+            color: #ffffff !important;
+            font-weight: 700;
+            opacity: 1 !important;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            padding: 12px;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+            opacity: 1;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--primary-blue);
+            color: white;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* --- MESSAGE HANDLERS --- */
+        .message-handler {
+            background: rgba(46, 204, 113, 0.2);
+            border-left: 4px solid var(--success-green);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        .error-handler {
+            background: rgba(255, 71, 87, 0.2);
+            border-left: 4px solid var(--danger-red);
+            padding: 12px; border-radius: 8px; margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        /* --- SECURITY TIPS --- */
+        .security-tip-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .security-tip-card:hover {
+            transform: scale(1.05) rotateX(10deg) rotateY(-5deg);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary-blue);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            margin-right: 20px;
+            background: linear-gradient(45deg, var(--primary-purple), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .warning-text {
+            color: var(--warning-orange);
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .btn-authorize {
+            background: linear-gradient(90deg, var(--primary-purple), var(--primary-blue));
+            border: none; border-radius: 12px;
+            padding: 14px; font-weight: 700; color: white;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-overlay">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            
+            <div class="col-lg-5">
+                <div class="login-glass">
+                    <div class="text-center">
+                        <img src="{% static 'images/logo.jpg' %}" alt="NWWDA" class="brand-logo">
+                        <h2 class="fw-bold text-white">NWWDA Portal</h2>
+                        <p class="text-white small mb-4">Identity Verification Required</p>
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="message-handler">
+                            <i class="bi bi-check-circle-fill me-2"></i> {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if form.errors %}
+                    <div class="error-handler">
+                        <i class="bi bi-shield-lock-fill me-2"></i> Access Denied: Invalid Username/Password
+                    </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label small text-uppercase fw-bold mb-2">Username</label>
+                            <input type="text" name="username" class="form-control" placeholder="e.g. moses.mutuma" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small text-uppercase fw-bold mb-2">Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-authorize w-100">
+                            Secure Login <i class="bi bi-fingerprint ms-2"></i>
+                        </button>
+                        
+                        <div class="text-center mt-4">
+                            <p class="small text-warning fw-bold mb-0">Forgot Password? Contact Admin ASAP!</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-6 offset-lg-1">
+                <h4 class="text-white fw-bold mb-4">
+                    <i class="bi bi-shield-shaded me-2 text-info"></i> Security Protocols
+                </h4>
+
+                <div class="security-tip-card d-flex align-items-center" style="animation-delay: 0s;">
+                    <div class="tip-icon"><i class="bi bi-key-fill"></i></div>
+                    <div>
+                        <span class="warning-text">Confidentiality</span>
+                        <h6 class="mb-1 fw-bold">Never Share Your Password</h6>
+                        <p class="small opacity-75 mb-0">ICT staff will NEVER ask for your password unless its urgent and you must be present. Keep it private to protect Agency data.</p>
+                    </div>
+                </div>
+
+                <div class="security-tip-card d-flex align-items-center" style="animation-delay: 0.5s;">
+                    <div class="tip-icon"><i class="bi bi-display"></i></div>
+                    <div>
+                        <span class="warning-text">Clear Desk Policy</span>
+                        <h6 class="mb-1 fw-bold">Lock Before You Walk</h6>
+                        <p class="small opacity-75 mb-0">Leaving your desk? Press <strong>Win + L</strong> to lock your PC and prevent unauthorized access.</p>
+                    </div>
+                </div>
+
+                <div class="security-tip-card d-flex align-items-center" style="animation-delay: 1s;">
+                    <div class="tip-icon"><i class="bi bi-envelope-exclamation"></i></div>
+                    <div>
+                        <span class="warning-text">Phishing Alert</span>
+                        <h6 class="mb-1 fw-bold">Think Before You Click</h6>
+                        <p class="small opacity-75 mb-0">Suspicious email? Do not open attachments. Report all suspicious links to ICT immediately.</p>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

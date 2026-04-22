@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f4f7fe;
+        overflow-x: hidden;
+    }
+
+    /* --- BACKGROUND BLOBS --- */
+    .blob {
+        position: fixed;
+        width: 500px;
+        height: 500px;
+        background: linear-gradient(135deg, rgba(118, 75, 162, 0.2) 0%, rgba(102, 126, 234, 0.2) 100%);
+        filter: blur(80px);
+        border-radius: 50%;
+        z-index: -1;
+    }
+    .blob-1 { top: -100px; right: -100px; }
+    .blob-2 { bottom: -100px; left: -100px; }
+
+    /* --- ANIMATIONS --- */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-entrance { animation: fadeInUp 0.8s ease-out forwards; }
+
+    /* --- SKY BLUE GLASS FORM CARD --- */
+    .glass-form-card {
+        background: rgba(224, 242, 254, 0.9); /* Muted Sky Blue */
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(186, 230, 253, 0.6); /* Soft blue border */
+        border-radius: 28px;
+        padding: 40px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        position: relative;
+    }
+
+    /* --- FORM CLOCK --- */
+    .form-clock-wrapper {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        background: rgba(255, 255, 255, 0.4);
+        padding: 5px 15px;
+        border-radius: 12px;
+        font-family: 'Monaco', monospace;
+        font-weight: 700;
+        color: #0369a1; /* Deep Blue clock text */
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-label {
+        font-weight: 700;
+        color: #1e40af; /* Deep blue for better label visibility */
+        margin-bottom: 8px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .form-control, .form-select {
+        border-radius: 16px;
+        padding: 14px 20px;
+        border: 2px solid rgba(186, 230, 253, 0.8);
+        background: rgba(255, 255, 255, 1); /* Solid white for high contrast */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: #1a202c;
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: #fff;
+        border-color: #764ba2;
+        box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.15);
+        transform: translateY(-2px);
+    }
+
+    /* --- PRIORITY INDICATORS --- */
+    select[name="priority"] {
+        font-weight: 600;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        border: none;
+        border-radius: 18px;
+        padding: 16px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: white;
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 20px rgba(118, 75, 162, 0.2);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(118, 75, 162, 0.35);
+        color: white;
+    }
+
+    .info-tag {
+        background: rgba(255, 255, 255, 0.5); /* Semi-transparent white tag */
+        color: #1e3a8a;
+        padding: 20px;
+        border-radius: 20px;
+        margin-bottom: 35px;
+        border-left: 6px solid #0ea5e9;
+        font-size: 0.95rem;
+    }
+
+    .input-group-text {
+        background: none;
+        border: none;
+        color: #a0aec0;
+    }
+</style>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="container animate-entrance" style="max-width: 850px; margin-top: 50px; margin-bottom: 80px;">
+    
+    <div class="text-center mb-5">
+        <h5 class="fw-bold text-dark display-4">New Support Request</h5>
+        <p class="text-muted lead">Provide the details below so we can assist you efficiently.</p>
+    </div>
+
+    <div class="glass-form-card shadow-lg">
+
+        <div class="info-tag d-flex align-items-center">
+            <div class="bg-white rounded-circle p-2 me-3 shadow-sm">
+                <i class="bi bi-lightning-charge-fill fs-4 text-warning"></i>
+            </div>
+            <div>
+                <strong>Quick Tip:</strong> Detailed descriptions (including error codes) help our technicians resolve issues up to <strong style="color: magenta;">50% faster</strong>.
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="mb-4">
+                <label class="form-label"><i class="bi bi-chat-left-dots me-2"></i>Issue Summary</label>
+                <input type="text" name="title" class="form-control" placeholder="Briefly, what's happening?" required>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <label class="form-label"><i class="bi bi-flag me-2"></i>Urgency Level</label>
+                    <select name="priority" class="form-select">
+                        <option value="Low" style="color: #28a745;">Low - Just an inquiry / Minor annoyance</option>
+                        <option value="Medium" selected style="color: #fd7e14;">Medium - Affecting my daily tasks</option>
+                        <option value="High" style="color: #dc3545;">High - Work is completely blocked (Urgent)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <label class="form-label"><i class="bi bi-pencil-square me-2"></i>Describe the Problem</label>
+                <textarea name="description" class="form-control" rows="5" placeholder="Step-by-step, what led to this issue? Did you see any error messages?" required></textarea>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-submit w-100 mb-3">
+                    <i class="bi bi-shield-check me-2"></i>Submit Ticket to ICT
+                </button>
+                <a href="{% url 'home' %}" class="btn btn-link text-decoration-none text-muted small">
+                    <i class="bi bi-arrow-left me-1"></i> Nevermind, take me back
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #fff5f5; /* Light red tint for warning */
+    }
+    .warning-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(220, 53, 69, 0.1);
+        border: none;
+        padding: 40px;
+        max-width: 500px;
+        margin: 60px auto;
+        text-align: center;
+    }
+    .warning-icon {
+        font-size: 4rem;
+        color: #dc3545;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container animate-entrance">
+    <div class="warning-card">
+        <i class="bi bi-exclamation-triangle-fill warning-icon"></i>
+        
+        <h2 class="fw-bold text-dark mb-3">Are you sure?</h2>
+        <p class="text-muted mb-4">
+            You are about to delete ticket <span class="fw-bold text-primary">#{{ ticket.id }}: {{ ticket.title }}</span>. 
+            This action cannot be undone.
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-danger btn-lg rounded-pill fw-bold">
+                    <i class="bi bi-trash3 me-2"></i>Yes, Delete Ticket
+                </button>
+                <a href="{% url 'ticket_detail' ticket.pk %}" class="btn btn-link text-muted mt-2">
+                    No, keep my ticket
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

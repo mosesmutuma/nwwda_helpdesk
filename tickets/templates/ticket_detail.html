@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .detail-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: none;
+        padding: 40px;
+    }
+    .status-banner {
+        padding: 15px 25px;
+        border-radius: 12px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        display: inline-block;
+    }
+    .meta-label {
+        font-weight: 700;
+        color: #718096;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        display: block;
+        margin-bottom: 5px;
+    }
+</style>
+
+<div class="container animate-entrance">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a href="{% url 'my_tickets' %}" class="btn btn-link text-muted p-0">
+                    <i class="bi bi-arrow-left me-2"></i>Back to My Tickets
+                </a>
+                <span class="text-muted fw-bold">Ticket #{{ ticket.id }}</span>
+            </div>
+
+            <div class="detail-card">
+                <div class="status-banner {% if ticket.status == 'Resolved' %}bg-success-subtle text-success{% else %}bg-primary-subtle text-primary{% endif %}">
+                    <i class="bi bi-info-circle-fill me-2"></i> Current Status: {{ ticket.status|default:"Pending" }}
+                </div>
+
+                <h2 class="fw-bold mb-4">{{ ticket.title }}</h2>
+
+                <div class="row mb-5">
+                    <div class="col-md-6 mb-3">
+                        <span class="meta-label">Submitted On</span>
+                        <p class="fw-bold">{{ ticket.created_at|date:"F d, Y @ H:i" }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <span class="meta-label">Department</span>
+                        <p class="fw-bold">{{ ticket.department }}</p>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <span class="meta-label">Issue Description</span>
+                    <div class="p-4 bg-light rounded-4">
+                        {{ ticket.description|linebreaks }}
+                    </div>
+                </div>
+
+                <hr class="my-5">
+
+                <div class="d-flex gap-3">
+                    <a href="{% url 'update_ticket' ticket.pk %}" class="btn btn-dark rounded-pill px-4">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Details
+                    </a>
+                    
+                    <a href="{% url 'delete_ticket' ticket.pk %}" class="btn btn-outline-danger rounded-pill px-4">
+                        <i class="bi bi-trash3 me-2"></i>Delete Request
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

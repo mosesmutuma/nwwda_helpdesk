@@ -1,0 +1,132 @@
+{% extends "admin/index.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    /* 1. BRANDING FIX: Force the Sidebar Logo to be a perfect circle */
+    .brand-link .brand-image {
+        float: left;
+        line-height: .8;
+        margin-left: .8rem;
+        margin-right: .5rem;
+        margin-top: -3px;
+        max-height: 33px;
+        width: 33px !important;
+        height: 33px !important;
+        object-fit: cover !important;
+        border-radius: 50% !important;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* 2. DASHBOARD CARD ANIMATIONS */
+    .glow-red { box-shadow: 0 0 15px rgba(231, 76, 60, 0.4); }
+    .glow-orange { box-shadow: 0 0 15px rgba(243, 156, 18, 0.4); }
+    .glow-green { box-shadow: 0 0 15px rgba(46, 204, 113, 0.4); }
+    
+    .small-box {
+        border-radius: 15px !important;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        border: none !important;
+    }
+    
+    .small-box:hover {
+        transform: translateY(-5px);
+    }
+
+    /* 3. PDF BUTTON STYLING */
+    .pdf-button-container {
+        margin: 30px 0;
+        padding: 0 15px;
+    }
+
+    .btn-pdf {
+        background-color: #17a2b8;
+        color: white !important;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-decoration: none !important;
+    }
+
+    .btn-pdf:hover {
+        background-color: #138496;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        transform: scale(1.02);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4 col-6">
+            <div class="small-box bg-danger glow-red">
+                <div class="inner">
+                    <h3>{{ pending_count|default:0 }}</h3>
+                    <p>PENDING TICKETS</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <a href="/admin/tickets/ticket/?status__icontains=pending" class="small-box-footer">
+                    VIEW ALL PENDING <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-6">
+            <div class="small-box bg-warning glow-orange">
+                <div class="inner" style="color: white !important;">
+                    <h3>{{ in_progress_count|default:0 }}</h3>
+                    <p>IN PROGRESS</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <a href="/admin/tickets/ticket/?status__icontains=progress" class="small-box-footer" style="color: rgba(255,255,255,0.8) !important;">
+                    TRACK ACTIVE WORK <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-6">
+            <div class="small-box bg-success glow-green">
+                <div class="inner">
+                    <h3>{{ resolved_today_count|default:0 }}</h3>
+                    <p>RESOLVED TODAY</p>
+                    <div style="font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 5px; margin-top: 5px;">
+                        <i class="fas fa-archive"></i> Total Resolved: <strong>{{ total_resolved_count|default:0 }}</strong>
+                    </div>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <a href="/admin/tickets/ticket/?status__icontains=resolved" class="small-box-footer">
+                    VIEW COMPLETE HISTORY <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pdf-button-container">
+        <div class="col-12">
+            <a href="{% url 'export_tickets_pdf' %}" class="btn-pdf" target="_blank">
+                <i class="fas fa-file-pdf" style="margin-right: 10px; color: #f8f9fa;"></i>
+                GENERATE OFFICIAL PDF REPORT
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {{ block.super }}
+        </div>
+    </div>
+</div>
+{% endblock %}

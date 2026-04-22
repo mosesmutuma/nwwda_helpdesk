@@ -1,0 +1,256 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NWWDA ICT HELPDESK PORTAL</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #dd690a 0%, #2575fc 100%);
+            --navy-dark: #1a1a2e;
+            --glass-white: rgba(255, 255, 255, 0.15);
+            --bg-soft: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-soft);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* --- NAVBAR STYLING --- */
+        .navbar-custom {
+            background: var(--primary-gradient);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.6rem 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-logo {
+            height: 55px;
+            width: 55px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            background-color: #ffffff;
+            padding: 2px;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.15));
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover .brand-logo {
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            color: rgb(255, 255, 255) !important;
+            font-weight: 500;
+            margin: 0 12px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover {
+            color: #f30808 !important;
+            transform: translateY(-2px);
+        }
+
+        .user-profile-tag {
+            background: var(--glass-white);
+            padding: 6px 16px;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- CONTENT AREA --- */
+        .container-main {
+            flex: 1;
+            padding: 20px 15px; /* Slightly reduced top padding to accommodate alerts */
+        }
+
+        /* --- FOOTER STYLING --- */
+        .footer-custom {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 0 20px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 50px;
+            margin-bottom: 5px;
+        }
+
+        .footer-link:hover {
+            background: var(--glass-white);
+            color: #ffffff !important;
+            transform: translateX(8px);
+        }
+
+        .footer-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 30px 0 20px 0;
+        }
+
+        .contact-pill {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-up { animation: fadeInUp 0.7s ease-out forwards; }
+
+        /* Alert Styling */
+        .alert-floating {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+            <img src="{% static 'images/logo.jpg' %}" alt="NWWDA Logo" class="brand-logo">
+            <div class="ms-3">
+                <div class="text-white fw-bold lh-1" style="letter-spacing: 1px; font-size: 1.2rem;">NWWDA</div>
+                <div class="text-white-50 small fw-semibold" style="font-size: 0.7rem; text-transform: uppercase;">ICT Helpdesk</div>
+            </div>
+        </a>
+
+        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}"><i class="bi bi-grid-1x2-fill me-2"></i>Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'create_ticket' %}"><i class="bi bi-plus-square-fill me-2"></i>Report Issue</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'my_tickets' %}"><i class="bi bi-archive-fill me-2"></i>My Requests</a></li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="user-profile-tag d-none d-md-block">
+                    <i class="bi bi-person-check-fill me-2"></i>{{ user.get_full_name }} 
+                    <span class="badge bg-white text-primary rounded-pill ms-2" style="font-size: 0.7rem; ">{{ user.profile.department }}</span>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2">
+                    <form action="{% url 'staff_logout' %}" method="post" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-light btn-sm rounded-pill px-4" style="border-color: rgba(255,255,255,0.4);">
+                            Logout
+                        </button>
+                    </form>
+                    <img src="{% static 'images/coa.png' %}" alt="Coat of Arms" class="brand-logo">
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-main">
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-floating animate-up" role="alert">
+                    {% if message.tags == 'warning' or message.tags == 'error' %}
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {% else %}
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                    {% endif %}
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="animate-up">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+
+<footer class="footer-custom">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-5">
+                <div class="d-flex align-items-center mb-4">
+                    <img src="{% static 'images/logo.jpg' %}" alt="Logo" class="brand-logo">
+                    <div class="ms-3">
+                        <h4 class="fw-bold mb-0">NWWDA ICT</h4>
+                        <small class="opacity-75">Northern Water Works Development Agency</small>
+                    </div>
+                </div>
+                <p class="opacity-75 pe-lg-5">
+                    Ensuring digital excellence and reliable ICT support for water development across the region.
+                </p>
+                <div class="contact-pill mt-3">
+                    <i class="bi bi-shield-lock-fill me-2"></i> Secure Support Channel
+                </div>
+            </div>
+
+            <div class="col-lg-3 offset-lg-1">
+                <h6 class="fw-bold text-uppercase mb-4 opacity-50 small" style="letter-spacing: 2px;">Navigation</h6>
+                <div class="d-flex flex-column">
+                    <a href="{% url 'home' %}" class="footer-link"><i class="bi bi-arrow-right-short me-1"></i> Dashboard</a>
+                    <a href="{% url 'create_ticket' %}" class="footer-link"><i class="bi bi-arrow-right-short me-1"></i> Open Ticket</a>
+                    <a href="{% url 'my_tickets' %}" class="footer-link"><i class="bi bi-arrow-right-short me-1"></i> Ticket History</a>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <h6 class="fw-bold text-uppercase mb-4 opacity-50 small" style="letter-spacing: 2px;">Helpdesk Support</h6>
+                <p class="mb-2"><i class="bi bi-telephone-inbound-fill me-3"></i><strong>0722 691 955</strong></p>
+                <p class="mb-2"><i class="bi bi-envelope-fill me-3"></i>nwwdaict@gmail.com</p>
+                <p class="small opacity-75 mt-3">Available 8:00 AM - 5:00 PM (EAT)</p>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="row align-items-center pb-4">
+            <div class="col-md-6 small opacity-50 text-center text-md-start">
+                <p>&copy; {% now "F Y" %} Northern Water Works Development Agency</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end small opacity-50">
+                Crafted by NWWDA ICT Department
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
