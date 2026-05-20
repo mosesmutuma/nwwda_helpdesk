@@ -75,6 +75,7 @@ def create_ticket(request):
             ticket.save()
 
             # --- INDIVIDUALIZED PERSONALIZED EMAIL NOTIFICATION ---
+            # Wrapped in try-except to prevent Server Timeouts/500 errors
             try:
                 subject = f"New ICT Ticket Alert: #{ticket.id} - {ticket.title}"
                 
@@ -107,9 +108,10 @@ def create_ticket(request):
                                 img.add_header('Content-Disposition', 'inline', filename=cid_name)
                                 email.attach(img)
                     
-                    email.send()
+                    email.send(fail_silently=False)
 
             except Exception as e:
+                # This logs the error to Render logs so you can debug without crashing the user's request
                 print(f"CRITICAL: Email failed to send: {e}")
 
             return redirect('my_tickets')
