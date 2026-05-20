@@ -2,27 +2,23 @@ import os
 from pathlib import Path
 import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nwwda-custom-key-!@#$%^&*(123456789)'
+# Pull secrets from environment
+SECRET_KEY = os.environ.get('SECRET_KEY', 'default-fallback-only-for-local')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-# --- NECESSARY FOR DEPLOYMENT ---
 ALLOWED_HOSTS = ['*']
 
-# --- DYNAMIC URL SETTING FOR EMAIL LINKS ---
+# URL setting
 if os.environ.get('RENDER'):
     SITE_URL = 'https://nwwda-helpdesk.onrender.com'
 else:
     SITE_URL = 'http://127.0.0.1:8000'
 
-# Application definition
 INSTALLED_APPS = [
-    'jazzmin',  # Must be before django.contrib.admin
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -34,7 +30,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Necessary for Render
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -48,7 +44,7 @@ ROOT_URLCONF = 'helpdesk.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'tickets' / 'templates'], 
+        'DIRS': [BASE_DIR / 'tickets' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -56,7 +52,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'tickets.context_processors.ticket_stats', 
+                'tickets.context_processors.ticket_stats',
             ],
         },
     },
@@ -64,7 +60,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'helpdesk.wsgi.application'
 
-# --- DATABASE CONFIGURATION (Using SQLite for temporary server testing) ---
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -72,7 +67,6 @@ DATABASES = {
     }
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -80,35 +74,31 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Nairobi'
 USE_I18N = True
 USE_TZ = True
 
-# --- AUTHENTICATION REDIRECTS ---
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 REDIRECT_FIELD_NAME = 'next'
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "tickets" / "static"]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# --- EMAIL CONFIGURATION (Gmail SMTP) ---
+# EMAIL CONFIGURATION
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'nwwdaict@gmail.com'
-EMAIL_HOST_PASSWORD = 'ptkz zbrk cecx qrmz'
-DEFAULT_FROM_EMAIL = 'NWWDA ICT Helpdesk <nwwdaict@gmail.com>'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
 
-# --- JAZZMIN ADMIN SETTINGS ---
 JAZZMIN_SETTINGS = {
     "site_title": "NWWDA ICT Admin",
     "site_header": "NWWDA",
@@ -126,14 +116,13 @@ JAZZMIN_SETTINGS = {
     "custom_links": {
         "auth": [
             {
-                "name": "Forgot Password? Reset Here", 
-                "url": "/password-reset/", 
+                "name": "Forgot Password? Reset Here",
+                "url": "/password-reset/",
                 "icon": "fas fa-key",
             },
         ],
     },
     "custom_css": "css/admin_dashboard.css",
-
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
