@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.contrib.staticfiles import finders
 from django.contrib import messages
 from django.contrib.auth.models import User
+from .models import Feedback
 
 # Email Imports
 from django.core.mail import EmailMultiAlternatives
@@ -73,51 +74,42 @@ def create_ticket(request):
                 
             ticket.save()
 
-            # --- UPDATED INSTANT EMAIL NOTIFICATION ---
+            # --- INDIVIDUALIZED PERSONALIZED EMAIL NOTIFICATION ---
             try:
                 subject = f"New ICT Ticket Alert: #{ticket.id} - {ticket.title}"
                 
-                # 1. Get all Superuser emails
-                superusers = list(User.objects.filter(is_superuser=True).values_list('email', flat=True))
+                # Get all unique recipients
+                ict_staff = User.objects.filter(is_staff=True, profile__department='ICT')
+                superusers = User.objects.filter(is_superuser=True)
+                recipients = (ict_staff | superusers).distinct()
                 
-                # 2. Define the mandatory emails
-                manual_emails = ['nwwdaict@gmail.com', 'mosesmutuma709@gmail.com']
-                
-                # 3. Combine and remove duplicates
-                recipient_list = list(set(superusers + manual_emails))
-                # Remove any empty strings if a superuser doesn't have an email set
-                recipient_list = [email for email in recipient_list if email]
+                for recipient in recipients:
+                    email_context = {
+                        'ticket': ticket,
+                        'user': request.user,
+                        'recipient': recipient,
+                        'site_url': 'https://nwwda-helpdesk.onrender.com',
+                    }
+                    
+                    html_content = render_to_string('emails/new_ticket_notification.html', email_context)
+                    text_content = strip_tags(html_content)
 
-                email_context = {
-                    'ticket': ticket,
-                    'user': request.user,
-                    'site_url': 'https://nwwda-helpdesk.onrender.com',
-                }
-                
-                html_content = render_to_string('emails/new_ticket_notification.html', email_context)
-                text_content = strip_tags(html_content)
+                    email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient.email])
+                    email.attach_alternative(html_content, "text/html")
+                    email.content_subtype = 'related' 
 
-                email = EmailMultiAlternatives(
-                    subject, 
-                    text_content, 
-                    settings.DEFAULT_FROM_EMAIL, 
-                    recipient_list
-                )
-                email.attach_alternative(html_content, "text/html")
-                email.content_subtype = 'related' 
+                    for cid_name, relative_path in [('logo', 'images/logo.jpg'), ('coa', 'images/coa.png')]:
+                        img_path = finders.find(relative_path)
+                        if img_path and os.path.exists(img_path):
+                            with open(img_path, 'rb') as f:
+                                img = MIMEImage(f.read())
+                                img.add_header('Content-ID', f'<{cid_name}>')
+                                img.add_header('Content-Disposition', 'inline', filename=cid_name)
+                                email.attach(img)
+                    
+                    email.send()
 
-                for cid_name, relative_path in [('logo', 'images/logo.jpg'), ('coa', 'images/coa.png')]:
-                    img_path = finders.find(relative_path)
-                    if img_path and os.path.exists(img_path):
-                        with open(img_path, 'rb') as f:
-                            img = MIMEImage(f.read())
-                            img.add_header('Content-ID', f'<{cid_name}>')
-                            img.add_header('Content-Disposition', 'inline', filename=cid_name)
-                            email.attach(img)
-
-                email.send()
             except Exception as e:
-                # This ensures the user still sees their ticket was created even if Gmail fails
                 print(f"CRITICAL: Email failed to send: {e}")
 
             return redirect('my_tickets')
@@ -166,11 +158,12 @@ def delete_ticket(request, pk):
         return redirect('my_tickets')
     return render(request, 'confirm_delete.html', {'ticket': ticket})
 
-# -------------------------------------------------------------------------
-# 3. OFFICIAL PDF REPORT GENERATION
-# -------------------------------------------------------------------------
 @login_required(login_url='/login/')
 def export_tickets_pdf(request):
+    if not request.user.is_staff:
+        messages.error(request, "Unauthorized access.")
+        return redirect('home')
+
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=20, bottomMargin=50)
     elements = []
@@ -193,7 +186,6 @@ def export_tickets_pdf(request):
     elements.append(Paragraph("FULL TICKET (ISSUES) REPORT", sub_header_style))
     elements.append(Spacer(1, 20))
 
-    # Shared Table Style (Left aligned content)
     ts = TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#1a1a2e")),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -204,7 +196,6 @@ def export_tickets_pdf(request):
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
     ])
 
-    # 1. Pending Section
     elements.append(Paragraph("PENDING TICKETS", section_style))
     pending_data = [['ID', 'REPORTED BY', 'TICKET TITLE', 'STATUS', 'DATE REPORTED']]
     pending_tickets = Ticket.objects.exclude(status='Resolved').order_by('id')
@@ -224,7 +215,6 @@ def export_tickets_pdf(request):
     
     elements.append(Spacer(1, 20))
 
-    # 2. Resolved Section
     elements.append(Paragraph("RESOLVED TICKETS", section_style))
     resolved_data = [['ID', 'REPORTED BY', 'TICKET TITLE', 'STATUS', 'DATE RESOLVED']]
     resolved_tickets = Ticket.objects.filter(status='Resolved').order_by('id')
@@ -270,10 +260,23 @@ def export_tickets_pdf(request):
     
     return FileResponse(buffer, content_type='application/pdf')
 
-# -------------------------------------------------------------------------
-# 4. AUTHENTICATION
-# -------------------------------------------------------------------------
 def staff_logout(request):
     logout(request)
     messages.success(request, "You have been successfully logged out of the NWWDA Secure Gateway.")
     return redirect('login')
+
+def submit_feedback(request):
+    if request.method == 'POST':
+        experience_rating = request.POST.get('experience_rating')
+        description = request.POST.get('description')
+        
+        Feedback.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            rating=int(experience_rating),
+            description=description
+        )
+        
+        messages.success(request, "Thank you! Your feedback has been logged securely in the database.")
+        return redirect('home')
+        
+    return render(request, 'feedback_form.html')

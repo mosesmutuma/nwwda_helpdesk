@@ -57,3 +57,13 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.full_announcement[:50]
+
+
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    rating = models.IntegerField()
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Feedback from {self.user if self.user else 'Anonymous'} - Rating: {self.rating}"

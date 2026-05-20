@@ -1,50 +1,103 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container animate-up mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-7">
-            <div class="text-center mb-4">
-                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 mb-2">Ticket #{{ ticket.id }}</span>
-                <h2 class="fw-bold text-dark">Update Support Request</h2>
-                <p class="text-muted">You can only modify this request while its status is <strong>Pending</strong>.</p>
+<style>
+    /* --- ANIMATION LOGIC --- */
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-up { animation: slideInUp 0.6s ease-out forwards; }
+
+    /* --- UNIFORM STYLES --- */
+    body { background-color: #ADD8E6; overflow-x: hidden; font-family: system-ui, -apple-system, sans-serif; }
+    
+    .blob { position: fixed; width: 550px; height: 550px; background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(30, 64, 175, 0.05) 100%); filter: blur(90px); border-radius: 50%; z-index: -1; }
+    .blob-1 { top: -120px; right: -120px; }
+    .blob-2 { bottom: -120px; left: -120px; }
+
+    .glass-detail-card { 
+        background: rgba(224, 242, 254, 0.9); 
+        backdrop-filter: blur(15px); 
+        border-radius: 28px; 
+        padding: 40px; 
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    }
+    .status-badge {
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+    .meta-label {
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 5px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: block;
+    }
+    .detail-box {
+        background: rgba(255, 255, 255, 0.6);
+        padding: 20px;
+        border-radius: 16px;
+        border-left: 5px solid #0ea5e9;
+    }
+</style>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="container pt-2 pb-5 animate-up" style="max-width: 900px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{% url 'my_tickets' %}" class="btn btn-link text-decoration-none text-dark fw-bold">
+            <i class="bi bi-arrow-left me-2"></i> Back to My Tickets
+        </a>
+        <span class="badge bg-primary rounded-pill px-3">Ticket #{{ ticket.id }}</span>
+    </div>
+
+    <div class="glass-detail-card">
+        <div class="status-badge {% if ticket.status == 'Resolved' %}bg-success text-white{% else %}bg-primary text-white{% endif %}">
+            <i class="bi bi-info-circle-fill me-2"></i> {{ ticket.status|default:"Pending" }}
+        </div>
+
+        <h2 class="fw-bold text-dark mb-4">{{ ticket.title }}</h2>
+
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <span class="meta-label">Submitted On</span>
+                <p class="fw-bold text-muted">{{ ticket.created_at|date:"F d, Y @ H:i" }}</p>
             </div>
-            
-            <div class="card border-0 shadow-lg rounded-4 p-4 overflow-hidden">
-                <div class="position-absolute top-0 start-0 w-100" style="height: 4px; background: var(--primary-gradient);"></div>
-                
-                <form method="post">
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-dark"><i class="bi bi-tag me-2"></i>Subject</label>
-                        <input type="text" name="title" class="form-control rounded-3 py-2" value="{{ ticket.title }}" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-dark"><i class="bi bi-exclamation-circle me-2"></i>Urgency Level</label>
-                        <select name="priority" class="form-select rounded-3 py-2" required>
-                            <option value="Low" {% if ticket.priority == 'Low' %}selected{% endif %}>Low - General Inquiry</option>
-                            <option value="Medium" {% if ticket.priority == 'Medium' %}selected{% endif %}>Medium - Standard Support</option>
-                            <option value="High" {% if ticket.priority == 'High' %}selected{% endif %}>High - Urgent Issue</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-bold text-dark"><i class="bi bi-justify-left me-2"></i>Detailed Description</label>
-                        <textarea name="description" class="form-control rounded-3" rows="6" required>{{ ticket.description }}</textarea>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary rounded-pill py-2 fw-bold shadow-sm">
-                            <i class="bi bi-check2-circle me-2"></i>Update Ticket
-                        </button>
-                        <a href="{% url 'my_tickets' %}" class="btn btn-light rounded-pill py-2 text-muted">
-                            Cancel and Go Back
-                        </a>
-                    </div>
-                </form>
+            <div class="col-md-6 mb-3">
+                <span class="meta-label">Department</span>
+                <p class="fw-bold text-muted">
+                    {% if ticket.department %}
+                        {{ ticket.department }}
+                    {% else %}
+                        {{ user.profile.department|default:"Not Specified" }}
+                    {% endif %}
+                </p>
             </div>
+        </div>
+
+        <div class="mb-5">
+            <span class="meta-label">Issue Description</span>
+            <div class="detail-box">
+                {{ ticket.description|linebreaks }}
+            </div>
+        </div>
+
+        <div class="d-flex gap-3">
+            <a href="{% url 'update_ticket' ticket.pk %}" class="btn btn-dark rounded-pill px-4 py-2">
+                <i class="bi bi-pencil-square me-2"></i> Edit Details
+            </a>
+            <a href="{% url 'delete_ticket' ticket.pk %}" class="btn btn-outline-danger rounded-pill px-4 py-2">
+                <i class="bi bi-trash3 me-2"></i> Delete Request
+            </a>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -63,7 +64,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'helpdesk.wsgi.application'
 
-# Database
+# --- DATABASE CONFIGURATION (Using SQLite for temporary server testing) ---
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -94,7 +95,7 @@ REDIRECT_FIELD_NAME = 'next'
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "tickets" / "static"]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # Necessary for Render
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -104,8 +105,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'nwwdaict@gmail.com'
-# UPDATED: Using the new App Password provided
-EMAIL_HOST_PASSWORD = 'ljls ttcz lucu xocs'
+EMAIL_HOST_PASSWORD = 'ptkz zbrk cecx qrmz'
 DEFAULT_FROM_EMAIL = 'NWWDA ICT Helpdesk <nwwdaict@gmail.com>'
 
 # --- JAZZMIN ADMIN SETTINGS ---
@@ -119,11 +119,9 @@ JAZZMIN_SETTINGS = {
     "search_model": ["auth.User", "tickets.Ticket"],
     "show_sidebar": True,
     "navigation_expanded": True,
-    
     "topmenu_links": [
         {"name": "Dashboard", "url": "admin:index", "permissions": ["auth.view_user"]},
     ],
-    
     "show_ui_builder": False,
     "custom_links": {
         "auth": [
@@ -134,8 +132,8 @@ JAZZMIN_SETTINGS = {
             },
         ],
     },
-    
     "custom_css": "css/admin_dashboard.css",
+
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",

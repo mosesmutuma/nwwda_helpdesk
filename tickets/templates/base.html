@@ -8,8 +8,7 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;400;600&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -21,11 +20,12 @@
 
         body {
             background-color: var(--bg-soft);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Exo 2', sans-serif !important;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
+            zoom: 0.85; 
         }
 
         /* --- NAVBAR STYLING --- */
@@ -33,13 +33,13 @@
             background: var(--primary-gradient);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.6rem 2rem;
+            padding: 0.3rem 2rem !important;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .brand-logo {
-            height: 55px;
-            width: 55px;
+            height: 40px !important;
+            width: 40px !important;
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid rgba(255, 255, 255, 0.8);
@@ -56,9 +56,9 @@
         .nav-link {
             color: rgb(255, 255, 255) !important;
             font-weight: 500;
-            margin: 0 12px;
+            margin: 0 8px;
             transition: all 0.3s ease;
-            font-size: 0.95rem;
+            font-size: 0.85rem !important;
         }
 
         .nav-link:hover {
@@ -68,24 +68,24 @@
 
         .user-profile-tag {
             background: var(--glass-white);
-            padding: 6px 16px;
+            padding: 4px 12px;
             border-radius: 50px;
             color: white;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         /* --- CONTENT AREA --- */
         .container-main {
             flex: 1;
-            padding: 20px 15px; /* Slightly reduced top padding to accommodate alerts */
+            padding: 15px 15px;
         }
 
         /* --- FOOTER STYLING --- */
         .footer-custom {
             background: var(--primary-gradient);
             color: white;
-            padding: 60px 0 20px 0;
+            padding: 40px 0 20px 0;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: auto;
         }
@@ -96,9 +96,10 @@
             font-weight: 500;
             transition: all 0.3s ease;
             display: inline-block;
-            padding: 6px 15px;
+            padding: 4px 10px;
             border-radius: 50px;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
+            font-size: 0.85rem;
         }
 
         .footer-link:hover {
@@ -109,17 +110,45 @@
 
         .footer-divider {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin: 30px 0 20px 0;
+            margin: 20px 0 20px 0;
         }
 
         .contact-pill {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
+            padding: 6px 15px;
             border-radius: 50px;
             display: inline-flex;
             align-items: center;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
+        }
+
+        /* --- LIVE CHAT STYLING --- */
+        #tawk-chat-container {
+            z-index: 999999 !important;
+        }
+
+        .live-chat-label {
+            position: fixed;
+            bottom: 95px; /* Adjust this to match the vertical height of your bubble */
+            right: 25px;  
+            background: #dd690a;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            z-index: 999998;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Use Orbitron for your main branding/headings */
+        .navbar-brand {
+            font-family: 'Orbitron', sans-serif !important;
+            letter-spacing: 2px;
         }
 
         @keyframes fadeInUp {
@@ -128,11 +157,11 @@
         }
         .animate-up { animation: fadeInUp 0.7s ease-out forwards; }
 
-        /* Alert Styling */
         .alert-floating {
-            border-radius: 15px;
+            border-radius: 12px;
             border: none;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -142,33 +171,34 @@
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
             <img src="{% static 'images/logo.jpg' %}" alt="NWWDA Logo" class="brand-logo">
-            <div class="ms-3">
-                <div class="text-white fw-bold lh-1" style="letter-spacing: 1px; font-size: 1.2rem;">NWWDA</div>
-                <div class="text-white-50 small fw-semibold" style="font-size: 0.7rem; text-transform: uppercase;">ICT Helpdesk</div>
+            <div class="ms-2">
+                <div class="text-white fw-bold lh-1" style="letter-spacing: 1px; font-size: 1rem;">NWWDA</div>
+                <div class="text-white-50 small fw-semibold" style="font-size: 0.6rem; text-transform: uppercase;">ICT Helpdesk</div>
             </div>
         </a>
 
         <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <i class="bi bi-list fs-2"></i>
+            <i class="bi bi-list fs-4"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}"><i class="bi bi-grid-1x2-fill me-2"></i>Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'create_ticket' %}"><i class="bi bi-plus-square-fill me-2"></i>Report Issue</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'my_tickets' %}"><i class="bi bi-archive-fill me-2"></i>My Requests</a></li>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}"><i class="bi bi-grid-1x2-fill me-1"></i>Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'create_ticket' %}"><i class="bi bi-plus-square-fill me-1"></i>Report Issue</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'my_tickets' %}"><i class="bi bi-archive-fill me-1"></i>My Requests</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'submit_feedback' %}"><i class="bi bi-chat-left-text-fill me-1"></i>Feedback</a></li>
             </ul>
 
             <div class="d-flex align-items-center gap-3">
                 <div class="user-profile-tag d-none d-md-block">
-                    <i class="bi bi-person-check-fill me-2"></i>{{ user.get_full_name }} 
-                    <span class="badge bg-white text-primary rounded-pill ms-2" style="font-size: 0.7rem; ">{{ user.profile.department }}</span>
+                    <i class="bi bi-person-check-fill me-1"></i>{{ user.get_full_name }} 
+                    <span class="badge bg-white text-primary rounded-pill ms-2" style="font-size: 0.65rem; ">{{ user.profile.department }}</span>
                 </div>
                 
                 <div class="d-flex align-items-center gap-2">
                     <form action="{% url 'staff_logout' %}" method="post" class="m-0">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-light btn-sm rounded-pill px-4" style="border-color: rgba(255,255,255,0.4);">
+                        <button type="submit" class="btn btn-outline-light btn-sm rounded-pill px-3" style="border-color: rgba(255,255,255,0.4); font-size: 0.8rem;">
                             Logout
                         </button>
                     </form>
@@ -180,7 +210,7 @@
 </nav>
 
 <div class="container-main">
-    <div class="container mt-3">
+    <div class="container mt-2">
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-floating animate-up" role="alert">
@@ -204,47 +234,47 @@
 
 <footer class="footer-custom">
     <div class="container">
-        <div class="row g-5">
+        <div class="row g-4">
             <div class="col-lg-5">
-                <div class="d-flex align-items-center mb-4">
+                <div class="d-flex align-items-center mb-3">
                     <img src="{% static 'images/logo.jpg' %}" alt="Logo" class="brand-logo">
                     <div class="ms-3">
-                        <h4 class="fw-bold mb-0">NWWDA ICT</h4>
-                        <small class="opacity-75">Northern Water Works Development Agency</small>
+                        <h6 class="fw-bold mb-0">NWWDA ICT</h6>
+                        <small class="opacity-75" style="font-size: 0.7rem;">Northern Water Works Development Agency</small>
                     </div>
                 </div>
-                <p class="opacity-75 pe-lg-5">
+                <p class="opacity-75 pe-lg-5" style="font-size: 0.8rem;">
                     Ensuring digital excellence and reliable ICT support for water development across the region.
                 </p>
-                <div class="contact-pill mt-3">
+                <div class="contact-pill mt-2">
                     <i class="bi bi-shield-lock-fill me-2"></i> Secure Support Channel
                 </div>
             </div>
 
             <div class="col-lg-3 offset-lg-1">
-                <h6 class="fw-bold text-uppercase mb-4 opacity-50 small" style="letter-spacing: 2px;">Navigation</h6>
+                <h6 class="fw-bold text-uppercase mb-3 opacity-50 small" style="letter-spacing: 2px; font-size: 0.7rem;">Navigation</h6>
                 <div class="d-flex flex-column">
                     <a href="{% url 'home' %}" class="footer-link"><i class="bi bi-arrow-right-short me-1"></i> Dashboard</a>
-                    <a href="{% url 'create_ticket' %}" class="footer-link"><i class="bi bi-arrow-right-short me-1"></i> Open Ticket</a>
-                    <a href="{% url 'my_tickets' %}" class="footer-link"><i class="bi bi-arrow-right-short me-1"></i> Ticket History</a>
+                    <a href="{% url 'create_ticket' %}" class="footer-link"><i class="bi bi-arrow-right-short me-1"></i> Submit Requests</a>
+                    <a href="{% url 'my_tickets' %}" class="footer-link"><i class="bi bi-arrow-right-short me-1"></i> Request History</a>
                 </div>
             </div>
 
             <div class="col-lg-3">
-                <h6 class="fw-bold text-uppercase mb-4 opacity-50 small" style="letter-spacing: 2px;">Helpdesk Support</h6>
-                <p class="mb-2"><i class="bi bi-telephone-inbound-fill me-3"></i><strong>0722 691 955</strong></p>
-                <p class="mb-2"><i class="bi bi-envelope-fill me-3"></i>nwwdaict@gmail.com</p>
-                <p class="small opacity-75 mt-3">Available 8:00 AM - 5:00 PM (EAT)</p>
+                <h6 class="fw-bold text-uppercase mb-3 opacity-50 small" style="letter-spacing: 2px; font-size: 0.7rem;">Helpdesk Support</h6>
+                <p class="mb-1" style="font-size: 0.8rem;"><i class="bi bi-telephone-inbound-fill me-2"></i><strong>0722 691 955</strong></p>
+                <p class="mb-1" style="font-size: 0.8rem;"><i class="bi bi-envelope-fill me-2"></i>nwwdaict@gmail.com</p>
+                <p class="small opacity-75 mt-2" style="font-size: 0.75rem;">Available 8:00 AM - 5:00 PM (EAT)</p>
             </div>
         </div>
 
         <div class="footer-divider"></div>
 
-        <div class="row align-items-center pb-4">
-            <div class="col-md-6 small opacity-50 text-center text-md-start">
+        <div class="row align-items-center">
+            <div class="col-md-6 small opacity-50 text-center text-md-start" style="font-size: 0.75rem;">
                 <p>&copy; {% now "F Y" %} Northern Water Works Development Agency</p>
             </div>
-            <div class="col-md-6 text-center text-md-end small opacity-50">
+            <div class="col-md-6 text-center text-md-end small opacity-50" style="font-size: 0.75rem;">
                 Crafted by NWWDA ICT Department
             </div>
         </div>
@@ -252,5 +282,20 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a0d6db64df5121c33c41cac/1jp2794gj';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+
+<div class="live-chat-label">Live Chat</div>
+
 </body>
 </html>

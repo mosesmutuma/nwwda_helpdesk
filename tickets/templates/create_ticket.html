@@ -2,180 +2,119 @@
 
 {% block content %}
 <style>
-    body {
-        background-color: #f4f7fe;
-        overflow-x: hidden;
+    /* --- ANIMATION LOGIC --- */
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-100px); }
+        to { opacity: 1; transform: translateX(0); }
     }
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(100px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    .fly-in-left { animation: slideInLeft 0.8s ease-out forwards; }
+    .fly-in-right { animation: slideInRight 0.8s ease-out forwards; }
 
-    /* --- BACKGROUND BLOBS --- */
-    .blob {
-        position: fixed;
-        width: 500px;
-        height: 500px;
-        background: linear-gradient(135deg, rgba(118, 75, 162, 0.2) 0%, rgba(102, 126, 234, 0.2) 100%);
-        filter: blur(80px);
-        border-radius: 50%;
-        z-index: -1;
-    }
-    .blob-1 { top: -100px; right: -100px; }
-    .blob-2 { bottom: -100px; left: -100px; }
+    /* --- LAYOUT FIXES --- */
+    .portal-container { margin-top: 5px; margin-bottom: 80px; }
+    
+    /* Ensure side cards stay compact and don't stretch */
+    .side-card-wrapper { display: flex; flex-direction: column; gap: 24px; }
 
-    /* --- ANIMATIONS --- */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-entrance { animation: fadeInUp 0.8s ease-out forwards; }
+    /* --- ORIGINAL STYLES --- */
+    body { background-color: #ADD8E6; overflow-x: hidden; font-family: system-ui, -apple-system, sans-serif; }
+    .blob { position: fixed; width: 550px; height: 550px; background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(30, 64, 175, 0.05) 100%); filter: blur(90px); border-radius: 50%; z-index: -1; }
+    .blob-1 { top: -120px; right: -120px; }
+    .blob-2 { bottom: -120px; left: -120px; }
 
-    /* --- SKY BLUE GLASS FORM CARD --- */
-    .glass-form-card {
-        background: rgba(224, 242, 254, 0.9); /* Muted Sky Blue */
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(186, 230, 253, 0.6); /* Soft blue border */
-        border-radius: 28px;
-        padding: 40px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-        position: relative;
-    }
-
-    /* --- FORM CLOCK --- */
-    .form-clock-wrapper {
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        background: rgba(255, 255, 255, 0.4);
-        padding: 5px 15px;
-        border-radius: 12px;
-        font-family: 'Monaco', monospace;
-        font-weight: 700;
-        color: #0369a1; /* Deep Blue clock text */
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .form-label {
-        font-weight: 700;
-        color: #1e40af; /* Deep blue for better label visibility */
-        margin-bottom: 8px;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 16px;
-        padding: 14px 20px;
-        border: 2px solid rgba(186, 230, 253, 0.8);
-        background: rgba(255, 255, 255, 1); /* Solid white for high contrast */
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        color: #1a202c;
-    }
-
-    .form-control:focus, .form-select:focus {
-        background: #fff;
-        border-color: #764ba2;
-        box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.15);
-        transform: translateY(-2px);
-    }
-
-    /* --- PRIORITY INDICATORS --- */
-    select[name="priority"] {
-        font-weight: 600;
-    }
-
-    .btn-submit {
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-        border: none;
-        border-radius: 18px;
-        padding: 16px;
-        font-weight: 700;
-        font-size: 1.1rem;
-        color: white;
-        transition: all 0.4s ease;
-        box-shadow: 0 10px 20px rgba(118, 75, 162, 0.2);
-    }
-
-    .btn-submit:hover {
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 15px 30px rgba(118, 75, 162, 0.35);
-        color: white;
-    }
-
-    .info-tag {
-        background: rgba(255, 255, 255, 0.5); /* Semi-transparent white tag */
-        color: #1e3a8a;
-        padding: 20px;
-        border-radius: 20px;
-        margin-bottom: 35px;
-        border-left: 6px solid #0ea5e9;
-        font-size: 0.95rem;
-    }
-
-    .input-group-text {
-        background: none;
-        border: none;
-        color: #a0aec0;
-    }
+    .info-display-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05); height: auto; transition: transform 0.25s ease; }
+    .info-display-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08); }
+    .info-card-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 1.2rem; }
+    .icon-blue { background-color: #e0f2fe; color: #0369a1; }
+    .icon-red { background-color: #fee2e2; color: #b91c1c; }
+    .info-display-card h6 { font-weight: 700; color: #1e293b; margin-bottom: 8px; font-size: 0.95rem; }
+    .info-display-card p { font-size: 0.85rem; color: #64748b; line-height: 1.5; margin: 0; }
+    
+    .glass-form-card { background: rgba(224, 242, 254, 0.9); backdrop-filter: blur(15px); border-radius: 28px; padding: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05); }
+    .form-label { font-weight: 700; color: #1e40af; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+    .form-control, .form-select { border-radius: 16px; padding: 14px 20px; border: 2px solid rgba(186, 230, 253, 0.8); }
+    .btn-submit { background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); border: none; border-radius: 18px; padding: 16px; font-weight: 700; color: white; transition: all 0.4s ease; }
+    .info-tag { background: rgba(255, 255, 255, 0.5); padding: 20px; border-radius: 20px; margin-bottom: 35px; border-left: 6px solid #0ea5e9; font-size: 0.95rem; }
 </style>
 
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 
-<div class="container animate-entrance" style="max-width: 850px; margin-top: 50px; margin-bottom: 80px;">
+<div class="container portal-container" style="max-width: 1300px;">
     
     <div class="text-center mb-5">
-        <h5 class="fw-bold text-dark display-4">New Support Request</h5>
-        <p class="text-muted lead">Provide the details below so we can assist you efficiently.</p>
+        <h2 class="fw-bold text-dark display-5" style="letter-spacing: -0.5px;">Support Request Portal</h2>
+        <p class="text-muted lead fs-6">NWWDA Infrastructure Desk & Ticket Registration</p>
     </div>
 
-    <div class="glass-form-card shadow-lg">
-
-        <div class="info-tag d-flex align-items-center">
-            <div class="bg-white rounded-circle p-2 me-3 shadow-sm">
-                <i class="bi bi-lightning-charge-fill fs-4 text-warning"></i>
+    <div class="row g-4 justify-content-center align-items-start">
+        
+        <div class="col-xl-2 col-lg-3 col-md-5 col-12 side-card-wrapper">
+            <div class="info-display-card fly-in-left">
+                <div class="info-card-icon icon-blue"><i class="bi bi-shield-lock-fill"></i></div>
+                <h6>Safe Submission</h6>
+                <p>Your support request is recorded securely in the internal logging system.</p>
             </div>
-            <div>
-                <strong>Quick Tip:</strong> Detailed descriptions (including error codes) help our technicians resolve issues up to <strong style="color: magenta;">50% faster</strong>.
+            <div class="info-display-card fly-in-left">
+                <div class="info-card-icon icon-red"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                <h6>Password Privacy</h6>
+                <p>The ICT department will never ask for your password via this portal.</p>
             </div>
         </div>
 
-        <form method="POST">
-            {% csrf_token %}
-            
-            <div class="mb-4">
-                <label class="form-label"><i class="bi bi-chat-left-dots me-2"></i>Issue Summary</label>
-                <input type="text" name="title" class="form-control" placeholder="Briefly, what's happening?" required>
-            </div>
-
-            <div class="row mb-4">
-                <div class="col-md-12">
-                    <label class="form-label"><i class="bi bi-flag me-2"></i>Urgency Level</label>
-                    <select name="priority" class="form-select">
-                        <option value="Low" style="color: #28a745;">Low - Just an inquiry / Minor annoyance</option>
-                        <option value="Medium" selected style="color: #fd7e14;">Medium - Affecting my daily tasks</option>
-                        <option value="High" style="color: #dc3545;">High - Work is completely blocked (Urgent)</option>
-                    </select>
+        <div class="col-xl-5 col-lg-6 col-md-12 col-12">
+            <div class="glass-form-card shadow-lg">
+                <div class="info-tag d-flex align-items-center">
+                    <div class="bg-white rounded-circle p-2 me-3 shadow-sm">
+                        <i class="bi bi-lightning-charge-fill fs-4 text-warning"></i>
+                    </div>
+                    <div>
+                        <strong>Quick Tip:</strong> Detailed descriptions help resolve issues up to <strong style="color: magenta;">50% faster</strong>.
+                    </div>
                 </div>
-            </div>
 
-            <div class="mb-5">
-                <label class="form-label"><i class="bi bi-pencil-square me-2"></i>Describe the Problem</label>
-                <textarea name="description" class="form-control" rows="5" placeholder="Step-by-step, what led to this issue? Did you see any error messages?" required></textarea>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label class="form-label"><i class="bi bi-chat-left-dots me-2"></i>Issue Summary</label>
+                        <input type="text" name="title" class="form-control" placeholder="Briefly, what's happening?" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label"><i class="bi bi-flag me-2"></i>Urgency Level</label>
+                        <select name="priority" class="form-select">
+                            <option value="Low">Low - Minor inquiry</option>
+                            <option value="Medium" selected>Medium - Affecting daily tasks</option>
+                            <option value="High">High - Work blocked (Urgent)</option>
+                        </select>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label"><i class="bi bi-pencil-square me-2"></i>Describe the Problem</label>
+                        <textarea name="description" class="form-control" rows="5" placeholder="Step-by-step, what led to this issue?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-submit w-100 mb-3"><i class="bi bi-shield-check me-2"></i>Submit Request to ICT</button>
+                    <div class="text-center">
+                        <a href="{% url 'home' %}" class="btn btn-link text-decoration-none text-muted small"><i class="bi bi-arrow-left me-1"></i> Back to Home</a>
+                    </div>
+                </form>
             </div>
+        </div>
 
-            <div class="text-center">
-                <button type="submit" class="btn btn-submit w-100 mb-3">
-                    <i class="bi bi-shield-check me-2"></i>Submit Ticket to ICT
-                </button>
-                <a href="{% url 'home' %}" class="btn btn-link text-decoration-none text-muted small">
-                    <i class="bi bi-arrow-left me-1"></i> Nevermind, take me back
-                </a>
+        <div class="col-xl-2 col-lg-3 col-md-5 col-12 side-card-wrapper">
+            <div class="info-display-card fly-in-right">
+                <div class="info-card-icon icon-blue"><i class="bi bi-person-badge-fill"></i></div>
+                <h6>Official Channels</h6>
+                <p>An assigned ICT officer will contact you using internal lines.</p>
             </div>
-        </form>
+            <div class="info-display-card fly-in-right">
+                <div class="info-card-icon icon-blue"><i class="bi bi-hdd-network-fill"></i></div>
+                <h6>Response Tracking</h6>
+                <p>High urgency tickets are flagged for immediate management attention.</p>
+            </div>
+        </div>
     </div>
 </div>
-
 {% endblock %}

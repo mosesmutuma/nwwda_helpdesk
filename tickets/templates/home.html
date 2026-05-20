@@ -1,103 +1,118 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 <style>
     body {
         font-family: 'Inter', sans-serif;
-        background-color: #f4f7fe;
+        background-color: #ADD8E6;
     }
 
     /* --- ANIMATIONS --- */
     @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
+        from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    .animate-entrance { animation: fadeInUp 1s ease-out forwards; }
-
-    /* --- FLOATING OSCILLATION --- */
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-        100% { transform: translateY(0px); }
-    }
-
-    .animate-float {
-        display: inline-block;
-        animation: float 3s ease-in-out infinite;
-    }
-
-    /* --- DIGITAL CLOCK STYLE --- */
-    .dashboard-clock-wrapper {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-
-    .digital-clock-dashboard {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 10px 30px;
-        border-radius: 15px;
-        color: #ffffff;
-        font-family: 'Monaco', 'Consolas', monospace;
-        font-weight: 700;
-        font-size: 1.8rem;
-        letter-spacing: 4px;
-        display: inline-flex;
-        align-items: center;
-        gap: 15px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    .dash-clock-icon {
-        font-size: 1.4rem;
-        color: rgb(217, 255, 0);
-        animation: pulse-clock 2s infinite;
-    }
-
-    @keyframes pulse-clock {
-        0% { opacity: 0.5; }
-        50% { opacity: 1; }
-        100% { opacity: 0.5; }
-    }
+    .animate-entrance { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
     /* --- HERO SECTION --- */
     .hero-section {
-        background: linear-gradient(rgba(45, 21, 86, 0.45), rgba(102, 126, 234, 0.35)),
+        background: linear-gradient(rgba(26, 15, 56, 0.55), rgba(45, 21, 86, 0.45)),
                     url('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1920');
         background-size: cover;
         background-position: center;
-        padding: 60px 15px; 
+        padding: 40px 15px; 
         border-radius: 20px;
         color: white;
         margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
     @media (min-width: 992px) {
-        .hero-section { padding: 110px 0; border-radius: 28px; }
+        .hero-section { padding: 60px 0; border-radius: 28px; }
     }
 
+    /* --- ADVANCED FROSTED GLASS CARD --- */
     .glass-card {
-        background: rgba(255, 255, 255, 0.15); 
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.12); 
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.22);
         border-radius: 24px;
-        padding: 30px 20px;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        padding: 35px 25px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
     }
 
     @media (min-width: 992px) {
-        .glass-card { padding: 50px; }
+        .glass-card { padding: 45px 50px; }
     }
 
-    /* --- UI ELEMENTS --- */
+    /* --- HUB CHIPS & BADGES --- */
+    .glass-chip {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 6px 16px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .accent-text {
+        color: #e1ff00;
+        text-shadow: 0 2px 10px rgba(225, 255, 0, 0.2);
+    }
+
+    /* --- DIGITAL CLOCK STYLE --- */
+    .digital-clock-dashboard {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-weight: 700;
+        font-size: 1.15rem;
+        letter-spacing: 2px;
+        color: #e1ff00;
+    }
+
+    .dash-clock-icon {
+        color: #e1ff00;
+    }
+
+    /* --- QUICK MINI STATS INSIDE GLASS --- */
+    .glass-divider {
+        border-left: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .mini-stat-box {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .mini-stat-box:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* --- BUTTONS --- */
+    .btn-action {
+        border-radius: 12px;
+        padding: 12px 28px;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    /* --- CORE UI ELEMENTS --- */
     .stat-card {
         border: none;
         border-radius: 18px;
@@ -109,48 +124,83 @@
 
     .announcement-card {
         border: none;
-        border-left: 6px solid #764ba2;
+        border-left: 6px solid #2d1556;
         border-radius: 12px;
         background: white;
     }
-
-    .btn-action {
-        border-radius: 12px;
-        padding: 12px 24px;
-        font-weight: 600;
-        transition: 0.3s;
-    }
 </style>
 
-<div class="hero-section text-center">
+<div class="hero-section text-start">
     <div class="container">
-        <div class="glass-card mx-auto animate-entrance" style="max-width: 850px;">
-            
-            <div class="dashboard-clock-wrapper">
-                <div class="digital-clock-dashboard">
-                    <i class="bi bi-clock-fill dash-clock-icon"></i>
-                    <span id="dashboardLiveClock">00:00:00</span>
-                </div>
-            </div>
+        <div class="glass-card mx-auto animate-entrance" style="max-width: 1050px;">
+            <div class="row g-4 align-items-center">
+                
+                <div class="col-lg-7">
+                    <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+                        <div class="glass-chip">
+                            <i class="bi bi-shield-check text-success"></i> Secure Session
+                        </div>
+                        <div class="glass-chip">
+                            <i class="bi bi-clock-fill dash-clock-icon"></i>
+                            <span id="dashboardLiveClock" class="digital-clock-dashboard">00:00:00</span>
+                        </div>
+                    </div>
 
-            <h1 class="fw-bold mb-3 fs-2 fs-md-1">
-                <span class="animate-float" style=" color: rgb(217, 255, 0);">
-                    {% now "H" as current_hour %}
-                    {% if current_hour|add:"0" < 12 %}Good Morning,{% elif current_hour|add:"0" < 18 %}Good Afternoon,{% else %}Good Evening,{% endif %} 
-                    {{ user.get_full_name|default:user.username }}
-                </span>
-            </h1>
-            <p class="lead mb-4 fw-light d-none d-md-block" style="opacity: 0.95;">
-                Streamline your workflow with the <strong>NWWDA ICT Support Portal</strong>, where expert help is just a click away. <br>
-                Log technical requests and track live status updates for your department’s issues right here.
-            </p>
-            <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
-                <a href="{% url 'create_ticket' %}" class="btn btn-light btn-action text-primary shadow-sm">
-                    <i class="bi bi-plus-circle me-2"></i>New Request
-                </a>
-                <a href="{% url 'my_tickets' %}" class="btn btn-outline-light btn-action">
-                    <i class="bi bi-folder2-open me-2"></i>My Tickets
-                </a>
+                    <h1 class="fw-bold mb-3 fs-2 fs-md-1">
+                        {% now "H" as current_hour %}
+                        {% if current_hour|add:"0" < 12 %}Good Morning,{% elif current_hour|add:"0" < 18 %}Good Afternoon,{% else %}Good Evening,{% endif %} 
+                        <span class="accent-text">{{ user.get_full_name|default:user.username }}</span>
+                    </h1>
+                    
+                    <p class="lead mb-4 fw-light fs-6 opacity-90 pe-lg-3">
+                        Welcome to the <strong>NWWDA ICT Support Portal</strong>. Streamline system coordination, log critical equipment requests, or track real-time technician diagnostic updates for your unit below.
+                    </p>
+                    
+                    <div class="d-flex flex-column flex-sm-row gap-3">
+                        <a href="{% url 'create_ticket' %}" class="btn btn-light btn-action text-primary shadow-sm">
+                            <i class="bi bi-plus-circle me-2"></i>New Request
+                        </a>
+                        <a href="{% url 'my_tickets' %}" class="btn btn-outline-light btn-action">
+                            <i class="bi bi-folder2-open me-2"></i>My Requests
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 d-none d-lg-block glass-divider ps-4">
+                    <div class="mb-3">
+                        <small class="text-uppercase tracking-wider opacity-75 fw-bold style="font-size: 0.75rem;">Agency Context Node</small>
+                        <h5 class="fw-bold text-white mb-0 mt-1">Northern Water Works Development Agency</h5>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="mini-stat-box">
+                                <small class="text-uppercase opacity-75 d-block mb-1" style="font-size: 10px; font-weight: 700;">Active Unit</small>
+                                <span class="fw-bold text-white d-block text-truncate" style="font-size: 0.95rem;">
+                                    <i class="bi bi-building me-1 text-info"></i>{{ user.profile.department }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mini-stat-box">
+                                <small class="text-uppercase opacity-75 d-block mb-1" style="font-size: 10px; font-weight: 700;">Pending Actions</small>
+                                <span class="fw-bold d-block text-warning" style="font-size: 1.1rem;">
+                                    <i class="bi bi-exclamation-circle me-1"></i>{{ open_count }} Open
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mini-stat-box d-flex align-items-center justify-content-between p-2 px-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="spinner-grow spinner-grow-sm text-success me-2" style="animation-duration: 1.5s;"></div>
+                                    <small class="text-uppercase opacity-75 fw-bold" style="font-size: 11px;">System Baseline</small>
+                                </div>
+                                <small class="fw-bold text-uppercase" style="font-size: 11px; color: #e1ff00;">{% now "F Y" %}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -212,17 +262,7 @@
                 </div>
             </div>
 
-            <div class="card border-0 bg-dark text-white rounded-4 shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="spinner-grow spinner-grow-sm text-success me-3"></div>
-                        <div>
-                            <p class="small mb-0 opacity-75">Current Month</p>
-                            <h6 class="mb-0 fw-bold text-uppercase">{% now "F Y" %}</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

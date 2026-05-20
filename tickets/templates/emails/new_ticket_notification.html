@@ -20,7 +20,13 @@
             <h2 style="margin: 10px 0 0 0;">New Support Ticket Received</h2>
         </div>
         <div class="content">
-            <p>Hello Admin,</p>
+            <p>
+                {% if recipient.is_superuser %}
+                    Hello Admin,
+                {% else %}
+                    Hello {{ recipient.get_full_name|default:"ICT Officer" }},
+                {% endif %}
+            </p>
             <p>A new ICT support request has been submitted by a staff member. Here are the details:</p>
             
             <table class="table">
@@ -38,9 +44,9 @@
             </div>
 
             <div style="text-align: center; margin-top: 30px;">
-                <a href="{{ site_url }}/admin/tickets/ticket/{{ ticket.id }}/change/" 
+                <a href="http://127.0.0.1:8000/admin/" 
                    style="background: #2575fc; color: white; padding: 12px 25px; text-decoration: none; border-radius: 50px; font-weight: bold;">
-                    Open in Admin Portal
+                   Open in Admin Portal
                 </a>
             </div>
         </div>

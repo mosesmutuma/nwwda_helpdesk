@@ -9,6 +9,7 @@ urlpatterns = [
     path('ticket/<int:pk>/delete/', views.delete_ticket, name='delete_ticket'),
     path('ticket/<int:pk>/update/', views.update_ticket, name='update_ticket'),
     path('export-pdf/', views.export_tickets_pdf, name='export_tickets_pdf'),
+    path('feedback/', views.submit_feedback, name='submit_feedback'),
     
     # Staff Portal Specific Logout
     path('logout/', views.staff_logout, name='staff_logout'),
